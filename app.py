@@ -5,6 +5,7 @@ from pymysql import cursors
 
 app= Flask(__name__)
 # MODIFICAN LO QUE SEA
+# MODIFICO OTRA COSA
 mysql= MySQL()
 app.config['MYSQL_DATABASE_HOST']='localhost'
 app.config['MYSQL_DATABASE_USER']='root'
