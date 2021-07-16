@@ -17,13 +17,14 @@ mysql.init_app(app)
 
 @app.route('/')
 def index():
-    sql="INSERT INTO `empleados` (`id`, `nombre`, `correo`, `foto`) VALUES (NULL, 'messi', 'messi@ciudad.com.ar', 'messi.jpg');"
+    sql="SELECT * FROM `empleados`;"
     conn=mysql.connect()
-    cursors=conn.cursor()
-    cursors.execute(sql)
+    cursor=conn.cursor()
+    cursor.execute(sql)
     conn.commit()
-    
-    return render_template('empleados/index.html')
+    empleados=cursor.fetchall()
+        
+    return render_template('empleados/index.html', empleados=empleados)
 
 
 @app.route('/create')
