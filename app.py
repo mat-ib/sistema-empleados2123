@@ -15,6 +15,9 @@ app.config['MYSQL_DATABASE_DB']='sistema2123'
 mysql.init_app(app)
 
 
+#####   INDEX  #####
+#####   INDEX  #####
+#####   INDEX  #####
 @app.route('/')
 def index():
     sql="SELECT * FROM `empleados`;"
@@ -26,6 +29,10 @@ def index():
         
     return render_template('empleados/index.html', empleados=empleados)
 
+
+#####   DELETE  #####
+#####   DELETE  #####
+#####   DELETE  #####
 @app.route('/destroy/<int:id>')
 def destroy(id):
    conn=mysql.connect()
@@ -36,6 +43,9 @@ def destroy(id):
    return redirect('/')
 
 
+#####   EDIT  #####
+#####   EDIT  #####
+#####   EDIT  #####
 @app.route('/edit/<int:id>')
 def edit(id):
     conn=mysql.connect()
@@ -46,6 +56,9 @@ def edit(id):
     return render_template('empleados/edit.html', empleados=empleados)
 
 
+#####   UPDATE  #####
+#####   UPDATE  #####
+#####   UPDATE  #####
 @app.route('/update', methods=['POST'])
 def update():
    _nombre=request.form['txtNombre']
@@ -62,6 +75,9 @@ def update():
    return redirect('/')
 
 
+#####   CREATE  #####
+#####   CREATE  #####
+#####   CREATE  #####
 @app.route('/create')
 def create():
    return render_template('empleados/create.html')
