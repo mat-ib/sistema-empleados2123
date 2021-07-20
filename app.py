@@ -1,5 +1,7 @@
 from flask import Flask
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, url_for, flash
+from flask import send_from_directory
+from flask.helpers import flash
 from flaskext.mysql import MySQL
 from pymysql import cursors
 from datetime import datetime
@@ -19,6 +21,10 @@ mysql.init_app(app)
 CARPETA = os.path.join('uploads')
 app.config['CARPETA']=CARPETA
 
+@app.route('/uploads/<nombreFoto>')
+def uploads(nombreFoto):
+   return send_from_directory(app.config['CARPETA'], nombreFoto)
+
 #####   INDEX  #####
 #####   INDEX  #####
 #####   INDEX  #####
@@ -28,8 +34,8 @@ def index():
     conn=mysql.connect()
     cursor=conn.cursor()
     cursor.execute(sql)
-    conn.commit()
     empleados=cursor.fetchall()
+    conn.commit()
         
     return render_template('empleados/index.html', empleados=empleados)
 
@@ -88,7 +94,8 @@ def update():
 
        cursor.execute("SELECT foto FROM empleados WHERE id=%s", id)
        fila=cursor.fetchall()
-       #print(os.path.join(app.config[0][0]))
+       print("voy a borrar")
+       print(os.path.join(app.config['CARPETA'], fila[0][0]))
        os.remove(os.path.join(app.config['CARPETA'], fila[0][0]))
        cursor.execute("UPDATE empleados SET foto=%s WHERE id=%s", (nuevoNombreFoto, id))
        conn.commit()
@@ -112,6 +119,10 @@ def storage():
     _correo=request.form['txtCorreo']
     _foto=request.files['txtFoto']
 
+    if _nombre=='' or _correo=='' or _foto=='':
+        flash('Falta rellenar algun dato')
+        return redirect(url_for('create'))
+
     now=datetime.now()
     tiempo=now.strftime("%Y%H%M%S")
 
@@ -127,7 +138,7 @@ def storage():
     cursor=conn.cursor()
     cursor.execute(sql, datos)
     conn.commit()
-    return render_template('empleados/index.html')
+    return redirect('/')
 
 
 if __name__=='__main__':
